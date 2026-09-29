@@ -46,7 +46,7 @@ const en = {
   home: {
     eyebrow: "Wallet signatures · on-chain proof",
     title: "Signatures anyone can check, forever.",
-    lead: "SignChain turns each document into a fingerprint, collects wallet signatures on it and records them on-chain. The file stays with you; the proof is public.",
+    lead: "Wallets sign a document's fingerprint and the chain records it. The file stays with you; the proof is public.",
     ctaPrimary: "Send a document",
     ctaSecondary: "Verify a file",
     heroCaption: "A live envelope from the demo: two of three signatures in, the third on its way.",
@@ -62,7 +62,7 @@ const en = {
     leaves: {
       eyebrow: "Privacy without custody",
       title: "What leaves your device: 64 characters.",
-      body: "SignChain never needs your document. Your browser computes its fingerprint, and only that fingerprint is signed and recorded. Try it: change one letter and watch every character move.",
+      body: "Only the fingerprint is signed. Change one letter and watch it move.",
       fileLabel: "Your document (stays here)",
       hashLabel: "What gets signed and recorded",
       input: "Document text",
@@ -119,7 +119,7 @@ const en = {
     verify: {
       eyebrow: "For auditors, lawyers and the curious",
       title: "Holding a signed file? Check it here.",
-      body: "No account, no wallet. Drop the file on the verification page and see who signed it, when, and whether a single character changed since.",
+      body: "No account, no wallet: who signed, when, and whether anything changed.",
       cta: "Open the verifier",
       points: ["Works from the file alone", "Shows every signer and block", "Catches any alteration"],
     },
@@ -132,7 +132,7 @@ const en = {
         },
         {
           q: "Is a wallet signature legally binding?",
-          a: "In many places an electronic signature is valid when you can show who signed and that they meant to (for example ESIGN in the US, eIDAS in the EU and Québec's IT framework act). SignChain produces that evidence; whether it's enough for a given contract depends on the law that applies. This is not legal advice.",
+          a: "Often, yes: laws like ESIGN and eIDAS accept signatures you can attribute to a person and an unaltered document. SignChain produces that evidence. Not legal advice.",
         },
         {
           q: "Can someone verify without SignChain?",
@@ -146,15 +146,11 @@ const en = {
           q: "What if a signer loses their wallet?",
           a: "Their past signatures stay valid: they're tied to the address and the block, not to the device. They sign new documents from a new address.",
         },
-        {
-          q: "Which network does this demo use?",
-          a: "A simulated Sepolia testnet. No real chain, wallet or funds are involved, and your demo data stays in this browser.",
-        },
       ],
     },
     closing: {
       title: "Send your first envelope in under a minute.",
-      body: "Use a sample contract or any file on your computer. It never leaves your browser.",
+      body: "Use a sample contract or any file. It never leaves your browser.",
       cta: "Start the demo",
     },
   },
@@ -163,7 +159,7 @@ const en = {
     metaDescription: "Drop a file or paste a fingerprint to see who signed it, when, and whether it changed. No account or wallet needed.",
     eyebrow: "Public verifier",
     title: "Is this the file that was signed?",
-    lead: "Drop the file, or paste its fingerprint. Your file is hashed here, in your browser, and compared with the public registry. No account, no wallet.",
+    lead: "Drop the file or paste its fingerprint. It's hashed in your browser; no account, no wallet.",
     drop: "Drop a file here",
     dropHint: "or choose one from your device · any format",
     choose: "Choose a file",
@@ -224,46 +220,46 @@ const en = {
       "The mechanics behind SignChain: SHA-256 fingerprints, EIP-712 signing requests, an on-chain registry, optional encrypted IPFS copies and public verification.",
     eyebrow: "How it works",
     title: "Exactly what is signed, stored and provable.",
-    lead: "A signature is only as trustworthy as your understanding of it. Here is every moving part, in the order it happens.",
+    lead: "Every moving part, in the order it happens.",
     sections: {
       fingerprint: {
         title: "1. The fingerprint",
-        body: "SHA-256 turns any file into 64 hexadecimal characters. The same bytes always give the same fingerprint, and it's practically impossible to find two files with the same one, or to rebuild the file from it. That's why SignChain can sign and publish the fingerprint while the document stays private.",
+        body: "SHA-256 turns any file into 64 characters. It can't be reversed, so the fingerprint is public and the file stays private.",
         points: ["Computed in the browser", "Any format: PDF, DOCX, image, text", "Change one byte, change everything"],
       },
       message: {
         title: "2. The signed message",
-        body: "Signers don't approve an opaque blob. Their wallet shows a structured EIP-712 message, and signing it proves that this address approved this fingerprint, under this title, in this role.",
+        body: "The wallet shows a readable EIP-712 message: this fingerprint, this title, this role.",
         caption: "What a signer's wallet displays",
       },
       registry: {
         title: "3. The registry",
-        body: "A small contract records each envelope and each signature as events. It stores addresses, fingerprints and block numbers, never names or content. Anyone can read it; only the signer's own key can add their signature.",
+        body: "Events hold addresses, fingerprints and blocks. Never names, never content.",
       },
       storage: {
         title: "4. Where the document lives",
         items: [
           {
             title: "Fingerprint only (default)",
-            body: "The document stays wherever you keep it. You and your counterparties hold copies; the chain holds the proof.",
+            body: "The parties keep the file; the chain keeps the proof.",
           },
           {
             title: "Encrypted copy on IPFS",
-            body: "The file is encrypted in the browser and pinned to IPFS. The content identifier (CID) is recorded with the envelope, so a copy survives even if every party loses theirs.",
+            body: "Encrypted in the browser, pinned to IPFS, its CID recorded with the envelope.",
           },
         ],
       },
       verify: {
         title: "5. Verification",
-        body: "Re-hash the file, look the fingerprint up, check each signature against its address. The verifier does this in a second, but it can be done with any SHA-256 tool and any block explorer: SignChain doesn't need to exist for the proof to hold.",
+        body: "Re-hash, look up, check each signature. Any SHA-256 tool and block explorer will do.",
       },
       legal: {
         title: "Legal standing",
-        body: "Laws such as ESIGN and UETA in the US, eIDAS in the EU (as a simple or advanced electronic signature, depending on setup) and Québec's Act to establish a legal framework for information technology generally accept electronic signatures that can be attributed to a person and tied to an unaltered document. SignChain is designed to produce exactly that evidence. Some documents (wills, some real-estate deeds, notarised acts) still need other formalities. This is general information, not legal advice.",
+        body: "ESIGN, eIDAS and Québec's IT framework act generally accept signatures tied to a person and an unaltered document. Wills and notarised acts need more. Not legal advice.",
       },
       dev: {
         title: "For developers",
-        body: "The demo's data layer (src/lib/demo) mirrors the contract below: createEnvelope, sign, decline and void map one-to-one to wallet calls, so it can be swapped for wagmi and viem without touching the interface.",
+        body: "src/lib/demo mirrors this contract one call at a time, ready to swap for wagmi and viem.",
         contractCaption: "Registry interface (sketch)",
         verifyCaption: "Verify a file in a few lines",
       },
@@ -283,7 +279,7 @@ const en = {
     gate: {
       eyebrow: "Demo workspace",
       title: "Connect a wallet to open your envelopes.",
-      body: "In SignChain your wallet is your pen: it signs fingerprints, it never moves funds. This demo simulates it, so nothing real is connected.",
+      body: "Your wallet is your pen: it signs fingerprints, never moves funds. Simulated here.",
       connect: "Connect demo wallet",
       connecting: "Waiting for the wallet…",
       rejected: "Wallet connection rejected. Nothing was shared.",
@@ -444,7 +440,7 @@ const en = {
       you: "(you)",
       action: {
         yourTurn: "Your signature is requested",
-        yourTurnBody: "Check the fingerprint above matches the file you were sent. Then sign: your wallet will show exactly what you approve.",
+        yourTurnBody: "Your wallet will show exactly what you approve.",
         sign: "Sign",
         decline: "Decline",
         notYet: "It's not your turn yet. You'll be able to sign after {name}.",

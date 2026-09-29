@@ -34,6 +34,7 @@ import { formatBytes } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
 import { FileDrop } from "./file-drop"
+import { InfoTip } from "./info-tip"
 import { TxFeedback } from "./tx-feedback"
 import { useTx } from "./use-tx"
 
@@ -174,9 +175,7 @@ export function NewEnvelope() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-      <p className="eyebrow">{dict.app.nav.new}</p>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-[-0.03em] text-balance sm:text-4xl">{c.title}</h1>
-      <p className="mt-2 text-muted-foreground">{c.lead}</p>
+      <h1 className="text-3xl font-extrabold tracking-[-0.03em] text-balance sm:text-4xl">{c.title}</h1>
 
       <ol className="mt-8 grid grid-cols-5 gap-1.5" aria-label={c.title}>
         {stepNames.map((name, i) => {
@@ -244,10 +243,12 @@ export function NewEnvelope() {
                       {c.doc.replace}
                     </Button>
                   </div>
-                  <div className="mt-4 rounded-sm border border-rule bg-background/50 p-3">
+                  <div className="relative mt-4 rounded-sm border border-rule bg-background/50 p-3">
                     <Fingerprint key={doc.hash} hash={doc.hash} label={c.doc.fingerprint} print />
+                    <span className="absolute top-2 right-2">
+                      <InfoTip text={c.doc.local} label={c.doc.fingerprint} />
+                    </span>
                   </div>
-                  <p className="mt-3 text-xs text-muted-foreground">{c.doc.local}</p>
                 </div>
               )}
               {duplicate && (
@@ -477,7 +478,7 @@ export function NewEnvelope() {
           {step === 4 && (
             <div className="space-y-5">
               <h2 className="text-xl font-bold">{c.review.title}</h2>
-              <p className="text-sm text-muted-foreground">{c.review.body}</p>
+              <div className="lg:hidden">
               <Summary
                 doc={doc}
                 title={title}
@@ -487,7 +488,7 @@ export function NewEnvelope() {
                 storage={storage}
                 nameOf={nameOf}
               />
-              <p className="text-xs text-muted-foreground">{dict.common.valueNotice}</p>
+              </div>
               <TxFeedback
                 view={view}
                 labels={{

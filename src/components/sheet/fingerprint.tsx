@@ -31,10 +31,10 @@ export function Fingerprint({
       <p
         aria-label={hash}
         className={cn(
-          "grid grid-cols-4 gap-x-3 gap-y-1 sm:grid-cols-8",
-          size === "sm" && "gap-x-2 text-[0.7rem]",
-          size === "md" && "text-[0.8rem] sm:text-[0.82rem]",
-          size === "lg" && "text-sm sm:text-[0.95rem]"
+          "grid w-fit grid-cols-4 gap-x-4 gap-y-1",
+          size === "sm" && "gap-x-2.5 text-[0.7rem]",
+          size === "md" && "text-[0.8rem] sm:text-[0.85rem]",
+          size === "lg" && "text-[0.9rem] sm:text-base"
         )}
       >
         {groups.map((g, gi) => (

@@ -12,7 +12,6 @@ import { SealMark, Wordmark } from "@/components/site/seal"
 import { ThemeToggle } from "@/components/site/theme"
 import { Button } from "@/components/ui/button"
 import { ConnectWallet } from "@/components/ui/connect-wallet"
-import { NetworkBadge } from "@/components/ui/network-badge"
 import { WalletAddress, WalletAvatar } from "@/components/ui/wallet"
 import { useI18n } from "@/i18n/client"
 import { href, MONARK_URL } from "@/i18n/config"
@@ -46,14 +45,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [])
 
   const items: NavItem[] = [
-    { href: href(locale, "/app"), label: dict.app.nav.envelopes },
+    { href: href(locale, "/app"), label: dict.app.nav.envelopes, also: href(locale, "/app/envelopes") },
     { href: href(locale, "/app/new"), label: dict.app.nav.new },
     { href: href(locale, "/verify"), label: dict.app.nav.verify },
   ]
   const connected = state?.wallet.status === "connected"
-  // Envelope pages belong to the "Envelopes" tab.
-  const tabActive = (item: NavItem, i: number) =>
-    isActive(pathname, item) || (i === 0 && pathname.startsWith(`${href(locale, "/app/envelopes")}`))
 
   const onConnect = async () => {
     setRejected(false)
@@ -72,16 +68,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Wordmark className="hidden sm:inline-flex" />
           </Link>
           <nav aria-label={dict.app.nav.label} className="hidden md:block">
-            <NavLinks items={items.map((it, i) => ({ ...it, prefix: i === 0 }))} className="flex items-center" />
+            <NavLinks items={items} className="flex items-center" />
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <DemoChip />
-            <NetworkBadge
-              name={dict.app.network}
-              variant="outline"
-              className="hidden lg:inline-flex"
-              icon={<span className="block size-full rounded-full bg-warning" />}
-            />
             <div className="hidden items-center gap-1 lg:flex">
               <LocaleSwitch locale={locale} label={dict.nav.language} />
               <ThemeToggle label={dict.nav.theme} />
@@ -147,7 +137,6 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
               {dict.common.demoBadge}
             </span>
-            <span>{dict.common.valueNotice}</span>
           </p>
           <a href={MONARK_URL} className="text-[13px] hover:text-foreground hover:underline" rel="noopener noreferrer" target="_blank">
             {dict.footer.builtWith}
@@ -163,7 +152,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <ul className="grid grid-cols-3">
           {items.map((item, i) => {
             const Icon = [InboxIcon, FilePlus2Icon, FileSearchIcon][i]!
-            const active = tabActive({ ...item, prefix: i === 0 }, i)
+            const active = isActive(pathname, item)
             return (
               <li key={item.href}>
                 <Link
@@ -194,8 +183,7 @@ function Gate({ connecting, rejected, onConnect }: { connecting: boolean; reject
   return (
     <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-24">
       <div className="fade-up">
-        <p className="eyebrow">{g.eyebrow}</p>
-        <h1 className="mt-3 text-3xl font-extrabold tracking-[-0.03em] text-balance sm:text-5xl">{g.title}</h1>
+        <h1 className="text-3xl font-extrabold tracking-[-0.03em] text-balance sm:text-5xl">{g.title}</h1>
         <p className="mt-4 max-w-lg text-muted-foreground">{g.body}</p>
         <div className="mt-8 flex flex-col items-start gap-3">
           <Button size="lg" className="h-12 px-6 text-base" onClick={onConnect} disabled={connecting}>

@@ -46,8 +46,7 @@ export function EnvelopesView() {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="eyebrow">{dict.app.nav.envelopes}</p>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl">{t(l.greeting, { name: ME.name.split(" ")[0]! })}</h1>
+          <h1 className="text-3xl font-extrabold tracking-[-0.03em] sm:text-4xl">{t(l.greeting, { name: ME.name.split(" ")[0]! })}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {t(l.summary, { needs: counts.needs, waiting: counts.waiting, done: counts.completed })}
           </p>

@@ -48,7 +48,7 @@ const fr: Dictionary = {
   home: {
     eyebrow: "Signatures par portefeuille · preuve on-chain",
     title: "Des signatures que tout le monde peut vérifier.",
-    lead: "SignChain réduit chaque document à une empreinte, y recueille les signatures des portefeuilles et les inscrit on-chain. Le fichier reste chez vous ; la preuve est publique.",
+    lead: "Les portefeuilles signent l'empreinte d'un document, la chaîne l'inscrit. Le fichier reste chez vous ; la preuve est publique.",
     ctaPrimary: "Envoyer un document",
     ctaSecondary: "Vérifier un fichier",
     heroCaption: "Un vrai dossier de la démo : deux signatures sur trois, la troisième en route.",
@@ -64,7 +64,7 @@ const fr: Dictionary = {
     leaves: {
       eyebrow: "La confidentialité sans dépôt",
       title: "Ce qui quitte votre appareil : 64 caractères.",
-      body: "SignChain n'a jamais besoin de votre document. Votre navigateur en calcule l'empreinte, et seule cette empreinte est signée puis inscrite. Essayez : changez une lettre, et chaque caractère bouge.",
+      body: "Seule l'empreinte est signée. Changez une lettre : tout bouge.",
       fileLabel: "Votre document (reste ici)",
       hashLabel: "Ce qui est signé et inscrit",
       input: "Texte du document",
@@ -121,7 +121,7 @@ const fr: Dictionary = {
     verify: {
       eyebrow: "Pour les auditeurs, les juristes et les curieux",
       title: "Vous avez un fichier signé ? Vérifiez-le ici.",
-      body: "Ni compte ni portefeuille. Déposez le fichier sur la page de vérification : vous verrez qui l'a signé, quand, et si un seul caractère a changé depuis.",
+      body: "Ni compte ni portefeuille : qui a signé, quand, et si quelque chose a changé.",
       cta: "Ouvrir le vérificateur",
       points: ["Fonctionne à partir du seul fichier", "Montre chaque signataire et chaque bloc", "Repère toute modification"],
     },
@@ -134,7 +134,7 @@ const fr: Dictionary = {
         },
         {
           q: "Une signature par portefeuille a-t-elle une valeur juridique ?",
-          a: "Dans bien des pays, une signature électronique est valable si l'on peut montrer qui a signé et qu'il entendait le faire (par exemple l'ESIGN aux États-Unis, eIDAS dans l'Union européenne et la Loi concernant le cadre juridique des technologies de l'information au Québec). SignChain produit cette preuve ; qu'elle suffise pour un contrat donné dépend du droit applicable. Ceci n'est pas un avis juridique.",
+          a: "Souvent, oui : l'ESIGN ou eIDAS admettent une signature rattachable à une personne et à un document intact. SignChain produit cette preuve. Pas un avis juridique.",
         },
         {
           q: "Peut-on vérifier sans SignChain ?",
@@ -148,15 +148,11 @@ const fr: Dictionary = {
           q: "Et si un signataire perd son portefeuille ?",
           a: "Ses signatures passées restent valides : elles sont liées à l'adresse et au bloc, pas à l'appareil. Il signera les prochains documents avec une nouvelle adresse.",
         },
-        {
-          q: "Quel réseau cette démo utilise-t-elle ?",
-          a: "Un testnet Sepolia simulé. Aucune vraie chaîne, aucun vrai portefeuille ni aucuns fonds réels ; vos données de démo restent dans ce navigateur.",
-        },
       ],
     },
     closing: {
       title: "Envoyez votre premier document en moins d'une minute.",
-      body: "Prenez un contrat d'exemple ou n'importe quel fichier de votre ordinateur. Il ne quitte jamais votre navigateur.",
+      body: "Un contrat d'exemple ou n'importe quel fichier. Il ne quitte jamais votre navigateur.",
       cta: "Lancer la démo",
     },
   },
@@ -165,7 +161,7 @@ const fr: Dictionary = {
     metaDescription: "Déposez un fichier ou collez une empreinte pour savoir qui l'a signé, quand, et s'il a changé. Ni compte ni portefeuille.",
     eyebrow: "Vérificateur public",
     title: "Est-ce bien le fichier qui a été signé ?",
-    lead: "Déposez le fichier ou collez son empreinte. Le fichier est haché ici, dans votre navigateur, puis comparé au registre public. Ni compte, ni portefeuille.",
+    lead: "Déposez le fichier ou collez son empreinte. Tout se passe dans votre navigateur ; ni compte, ni portefeuille.",
     drop: "Déposez un fichier ici",
     dropHint: "ou choisissez-en un sur votre appareil · tous formats",
     choose: "Choisir un fichier",
@@ -226,46 +222,46 @@ const fr: Dictionary = {
       "La mécanique de SignChain : empreintes SHA-256, demandes de signature EIP-712, registre on-chain, copies IPFS chiffrées en option et vérification publique.",
     eyebrow: "Fonctionnement",
     title: "Ce qui est signé, conservé et prouvable, exactement.",
-    lead: "Une signature ne vaut que ce que vous en comprenez. Voici chaque rouage, dans l'ordre où il intervient.",
+    lead: "Chaque rouage, dans l'ordre où il intervient.",
     sections: {
       fingerprint: {
         title: "1. L'empreinte",
-        body: "Le SHA-256 transforme n'importe quel fichier en 64 caractères hexadécimaux. Les mêmes octets donnent toujours la même empreinte ; trouver deux fichiers qui partagent la leur, ou reconstituer un fichier à partir d'elle, est pratiquement impossible. C'est pourquoi SignChain peut signer et publier l'empreinte tandis que le document reste privé.",
+        body: "Le SHA-256 réduit tout fichier à 64 caractères. Impossible à inverser : l'empreinte est publique, le fichier reste privé.",
         points: ["Calculée dans le navigateur", "Tous formats : PDF, DOCX, image, texte", "Un octet change, tout change"],
       },
       message: {
         title: "2. Le message signé",
-        body: "Les signataires n'approuvent pas un bloc opaque. Leur portefeuille affiche un message structuré EIP-712 ; le signer prouve que cette adresse a approuvé cette empreinte, sous ce titre, dans ce rôle.",
+        body: "Le portefeuille affiche un message EIP-712 lisible : cette empreinte, ce titre, ce rôle.",
         caption: "Ce qu'affiche le portefeuille d'un signataire",
       },
       registry: {
         title: "3. Le registre",
-        body: "Un petit contrat consigne chaque dossier et chaque signature sous forme d'événements. Il conserve des adresses, des empreintes et des numéros de bloc, jamais de noms ni de contenu. Tout le monde peut le lire ; seule la clé du signataire peut y ajouter sa signature.",
+        body: "Des événements : adresses, empreintes, blocs. Jamais de noms ni de contenu.",
       },
       storage: {
         title: "4. Où vit le document",
         items: [
           {
             title: "Empreinte seule (par défaut)",
-            body: "Le document reste là où vous le rangez. Vous et vos cosignataires en gardez une copie ; la chaîne garde la preuve.",
+            body: "Les parties gardent le fichier ; la chaîne garde la preuve.",
           },
           {
             title: "Copie chiffrée sur IPFS",
-            body: "Le fichier est chiffré dans le navigateur puis épinglé sur IPFS. Son identifiant de contenu (CID) est inscrit avec le dossier : une copie survit même si toutes les parties perdent la leur.",
+            body: "Chiffrée dans le navigateur, épinglée sur IPFS, son CID inscrit avec le dossier.",
           },
         ],
       },
       verify: {
         title: "5. La vérification",
-        body: "Hacher de nouveau le fichier, chercher l'empreinte, contrôler chaque signature avec son adresse. Le vérificateur le fait en une seconde, mais n'importe quel outil SHA-256 et n'importe quel explorateur de blocs y suffisent : la preuve tient même sans SignChain.",
+        body: "Hacher, chercher, contrôler chaque signature. N'importe quel outil SHA-256 et explorateur de blocs suffit.",
       },
       legal: {
         title: "Valeur juridique",
-        body: "Des lois comme l'ESIGN et l'UETA aux États-Unis, le règlement eIDAS dans l'Union européenne (signature électronique simple ou avancée, selon la configuration) et la Loi concernant le cadre juridique des technologies de l'information au Québec admettent en général une signature électronique rattachable à une personne et liée à un document intact. SignChain est conçu pour produire exactement cette preuve. Certains actes (testaments, certains actes immobiliers, actes notariés) exigent toutefois d'autres formalités. Information générale, pas un avis juridique.",
+        body: "L'ESIGN, eIDAS et la loi québécoise sur le cadre juridique des TI admettent en général une signature liée à une personne et à un document intact. Testaments et actes notariés exigent davantage. Pas un avis juridique.",
       },
       dev: {
         title: "Pour les développeurs",
-        body: "La couche de données de la démo (src/lib/demo) reflète le contrat ci-dessous : createEnvelope, sign, decline et void correspondent chacun à un appel de portefeuille ; on peut donc la remplacer par wagmi et viem sans toucher à l'interface.",
+        body: "src/lib/demo reflète ce contrat appel par appel, prêt à céder la place à wagmi et viem.",
         contractCaption: "Interface du registre (esquisse)",
         verifyCaption: "Vérifier un fichier en quelques lignes",
       },
@@ -285,7 +281,7 @@ const fr: Dictionary = {
     gate: {
       eyebrow: "Espace de démo",
       title: "Connectez un portefeuille pour ouvrir vos dossiers.",
-      body: "Dans SignChain, votre portefeuille est votre stylo : il signe des empreintes, il ne déplace jamais de fonds. Cette démo le simule ; rien de réel n'est connecté.",
+      body: "Votre portefeuille est votre stylo : il signe des empreintes, sans jamais déplacer de fonds. Simulé ici.",
       connect: "Connecter le portefeuille de démo",
       connecting: "En attente du portefeuille…",
       rejected: "Connexion refusée. Rien n'a été partagé.",
@@ -446,7 +442,7 @@ const fr: Dictionary = {
       you: "(vous)",
       action: {
         yourTurn: "Votre signature est demandée",
-        yourTurnBody: "Vérifiez que l'empreinte ci-dessus correspond au fichier reçu. Puis signez : votre portefeuille affichera exactement ce que vous approuvez.",
+        yourTurnBody: "Votre portefeuille affichera exactement ce que vous approuvez.",
         sign: "Signer",
         decline: "Refuser",
         notYet: "Ce n'est pas encore votre tour. Vous pourrez signer après {name}.",

@@ -70,7 +70,6 @@ export function DemoControls({ compact = false }: { compact?: boolean }) {
             </Button>
           </div>
         </div>
-        <p className="text-center text-xs text-muted-foreground">{dict.common.demoBadge}</p>
       </DialogContent>
     </Dialog>
   )

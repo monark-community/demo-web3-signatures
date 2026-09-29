@@ -1,6 +1,6 @@
 "use client"
 
-import { BanIcon, CheckCircle2Icon, ClockIcon, DownloadIcon, FileTextIcon, Loader2Icon, SearchXIcon, XCircleIcon } from "lucide-react"
+import { ArrowRightIcon, BanIcon, CheckCircle2Icon, ClockIcon, DownloadIcon, FileTextIcon, Loader2Icon, SearchXIcon, XCircleIcon } from "lucide-react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useId, useRef, useState } from "react"
@@ -36,7 +36,7 @@ interface Checked {
 }
 
 export function VerifyView() {
-  const { dict } = useI18n()
+  const { locale, dict } = useI18n()
   const v = dict.verify
   const state = useDemo()
   const params = useSearchParams()
@@ -124,8 +124,7 @@ export function VerifyView() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
       <div className="max-w-2xl">
-        <p className="eyebrow">{v.eyebrow}</p>
-        <h1 className="mt-3 text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-balance sm:text-5xl">{v.title}</h1>
+        <h1 className="text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-balance sm:text-5xl">{v.title}</h1>
         <p className="mt-4 text-lg text-muted-foreground">{v.lead}</p>
       </div>
 
@@ -199,17 +198,10 @@ export function VerifyView() {
               ))}
             </ul>
           </div>
-          <div className="px-1">
-            <h2 className="eyebrow">{v.how.title}</h2>
-            <ol className="mt-3 space-y-2 text-sm text-muted-foreground">
-              {v.how.items.map((it, i) => (
-                <li key={it} className="flex gap-2">
-                  <span className="font-mono text-xs text-primary">0{i + 1}</span>
-                  {it}
-                </li>
-              ))}
-            </ol>
-          </div>
+          <Link href={href(locale, "/how-it-works")} className="inline-flex items-center gap-1.5 px-1 text-sm font-medium text-primary hover:underline">
+            {v.how.title}
+            <ArrowRightIcon className="size-4" aria-hidden="true" />
+          </Link>
         </aside>
       </div>
 

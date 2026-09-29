@@ -15,7 +15,7 @@ export function HeroSheet({ locale, dict }: { locale: Locale; dict: Dictionary }
   const nora = partyByName("Nora")
   const lea = partyByName("Léa")
   const amir = partyByName("Amir")
-  const body = doc.text.split("\n").slice(4, 12).join("\n")
+  const body = doc.text.split("\n").slice(5, 9).join("\n")
   return (
     <DocumentSheet
       heading={d.title}

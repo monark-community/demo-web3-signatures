@@ -37,6 +37,7 @@ import { formatBytes, formatDateTime, formatNumber, formatRelative, shortHex } f
 import { cn } from "@/lib/utils"
 
 import { isMe, myTurn, nameFor, receiptJson, signedCount } from "./helpers"
+import { InfoTip } from "./info-tip"
 import { TxFeedback } from "./tx-feedback"
 import { useTx } from "./use-tx"
 
@@ -148,7 +149,7 @@ function EnvelopeDetail({ e }: { e: Envelope }) {
         </blockquote>
       )}
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-[1.25fr_1fr]">
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
         <div className="min-w-0 space-y-6">
           <DocumentSheet
             heading={e.title}
@@ -174,8 +175,11 @@ function EnvelopeDetail({ e }: { e: Envelope }) {
           <AuditTrail e={e} />
         </div>
 
-        <div className="min-w-0 space-y-6">
-          <ActionPanel e={e} />
+        {/* On phones the action comes first, the document next, then signers and proof. */}
+        <div className="min-w-0 space-y-6 max-lg:contents">
+          <div className="min-w-0 max-lg:order-first">
+            <ActionPanel e={e} />
+          </div>
           <SignerList e={e} />
           <ProofPanel e={e} />
         </div>
@@ -287,7 +291,6 @@ function ActionPanel({ e }: { e: Envelope }) {
             {a.sign}
           </Button>
         </div>
-        <p className="mt-3 text-[0.7rem] text-muted-foreground">{dict.common.valueNotice}</p>
       </>
     )
   } else {
@@ -312,11 +315,10 @@ function ActionPanel({ e }: { e: Envelope }) {
 
       {e.status === "awaiting" && nextOther && !sign.busy && (
         <div className="mt-4 border-t border-dashed pt-4">
-          <Button type="button" variant="secondary" onClick={doSimulate} disabled={!!simulating} className="w-full">
+          <Button type="button" variant="secondary" onClick={doSimulate} disabled={!!simulating} className="w-full" title={a.simulateHint}>
             {simulating ? <Loader2Icon className="animate-spin" aria-hidden="true" /> : <UsersIcon aria-hidden="true" />}
             {simulating ? t(a.simulating, { name: simulating }) : t(a.simulate, { name: nameFor(nextOther.address, unknown) })}
           </Button>
-          <p className="mt-2 text-center text-xs text-muted-foreground">{a.simulateHint}</p>
         </div>
       )}
 
@@ -458,9 +460,12 @@ function ProofPanel({ e }: { e: Envelope }) {
 
   return (
     <section aria-labelledby="proof-title" className="rounded-sm border bg-card p-5">
-      <h2 id="proof-title" className="eyebrow">
-        {r.title}
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 id="proof-title" className="eyebrow">
+          {r.title}
+        </h2>
+        <InfoTip text={r.hint} label={r.title} />
+      </div>
       <dl className="mt-3 space-y-2.5 text-sm">
         <div className="flex justify-between gap-4">
           <dt className="text-muted-foreground">{d.anchor}</dt>
@@ -497,7 +502,6 @@ function ProofPanel({ e }: { e: Envelope }) {
         <CopyIcon aria-hidden="true" />
         {r.copyHash}
       </Button>
-      <p className="mt-2 text-xs text-muted-foreground">{r.hint}</p>
     </section>
   )
 }

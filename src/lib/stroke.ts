@@ -7,19 +7,26 @@ export function strokePath(signature: string, width = 240, height = 64): string 
   const hex = signature.replace(/^0x/, "")
   const byte = (i: number) => parseInt(hex.slice((i * 2) % (hex.length - 1), ((i * 2) % (hex.length - 1)) + 2), 16) || 0
 
-  const n = 7 + (byte(0) % 3)
-  const left = 12
-  const right = width - 40
-  const mid = height * 0.52
-  const amp = height * 0.34
-  const pts: Array<[number, number]> = []
-  for (let i = 0; i < n; i++) {
-    const t = i / (n - 1)
-    // Each step moves right, with an occasional back-loop like a looped letter.
-    const back = byte(i + 3) % 4 === 0 && i > 0 && i < n - 1 ? -14 - (byte(i + 11) % 10) : 0
-    const x = left + t * (right - left) + back
-    const y = mid + ((byte(i + 20) - 128) / 128) * amp * (i % 2 === 0 ? 1 : -0.8)
-    pts.push([x, Math.max(6, Math.min(height - 6, y))])
+  const left = 10
+  const right = width - 36
+  const base = height * 0.7
+  const top = height * 0.12
+  // A tall opening capital with a loop, then humps like cursive letters.
+  const pts: Array<[number, number]> = [
+    [left + 6, base],
+    [left + 14 + (byte(1) % 10), top + (byte(2) % 6)],
+    [left + 4 + (byte(3) % 8), base + 4],
+    [left + 22 + (byte(4) % 8), height * 0.45],
+  ]
+  const humps = 6 + (byte(0) % 4)
+  const span = right - (left + 30)
+  for (let i = 0; i < humps; i++) {
+    const x0 = left + 30 + (i / humps) * span
+    const hi = top + 6 + (byte(i + 10) / 255) * (base - top) * 0.55
+    const loop = byte(i + 30) % 3 === 0
+    pts.push([x0 + span / humps / 2, hi])
+    if (loop) pts.push([x0 + span / humps / 2 - 9, base - 6 - (byte(i + 40) % 8)])
+    pts.push([x0 + span / humps, base - (byte(i + 50) % 10)])
   }
 
   // Catmull-Rom to cubic Bézier.

@@ -55,7 +55,8 @@ Supporting benefits (outcomes):
 ## 3. Hero
 
 - **Headline:** "Signatures anyone can check, forever." (5 words) · FR « Des signatures que tout le monde peut vérifier. »
-- **Subheadline:** "SignChain turns each document into a fingerprint, collects wallet signatures on it and records them on-chain. The file stays with you; the proof is public." · FR « SignChain réduit chaque document à une empreinte, y recueille les signatures des portefeuilles et les inscrit on-chain. Le fichier reste chez vous ; la preuve est publique. »
+- **Subheadline:** "Wallets sign a document's fingerprint and the chain records it. The file stays with you; the proof is public." (19 words) · FR « Les portefeuilles signent l'empreinte d'un document, la chaîne l'inscrit. Le fichier reste chez vous ; la preuve est publique. »
+- No eyebrow and no caption: the sheet speaks for itself.
 - **Primary CTA:** "Send a document" → `/{locale}/app/new` (connects the demo wallet first) · FR « Envoyer un document »
 - **Secondary CTA:** "Verify a file" → `/{locale}/verify` · FR « Vérifier un fichier »
 - **Hero visual: "The sealed sheet"**, built in code. A real envelope from the demo, drawn as a document sheet: title ("Master Services Agreement — Halden Freight × Tessel Robotics"), three signature lines, the fingerprint printed in eight mono blocks, and a wax seal. On load the fingerprint prints block by block, two signature strokes draw themselves (each stroke generated from that signer's signature bytes), the third line stays "awaiting", and a block number ticks in under the seal. **Why:** the product's idea is "a file becomes a fingerprint, signatures attach to the fingerprint". A photo of a pen can't show that; the UI shows it in two seconds and is a preview of the real app.
@@ -66,9 +67,9 @@ All routes live under `/{locale}` (`en`, `fr`); `/` redirects by `Accept-Languag
 
 | Route | Purpose | Sections, in order |
 |-|-|-|
-| `/{locale}` | Explain the idea fast and send people into the product. | Hero (sealed sheet) · "What leaves your device" (the file vs the fingerprint, side by side, with a live hashing toy: type in a box, watch the fingerprint change completely) · How a signature is made (fingerprint → signature → anchor → verify, four steps using real UI fragments) · Who signs with SignChain (three photo use cases: offer letters, creative licences, collective approvals) · Verify teaser (drop zone linking to `/verify`) · FAQ · Closing CTA |
-| `/{locale}/verify` | Public verification portal: no wallet, no account. **Justified:** verifiers are a distinct audience (auditors, lawyers) who must never be asked to sign in; it's also the product's proof. | Drop a file / paste a fingerprint · Try with samples (original, one number changed) · Result: match certificate, registered-but-unsigned, or no record with the tamper diff · How verification works (3 lines) |
-| `/{locale}/how-it-works` | The mechanics for careful buyers, legal teams and developers. **Justified:** a signature product must explain exactly what is signed, stored and provable; this is also where the legal caveats live. | The fingerprint · The signed message (EIP-712 preview) · The registry contract (interface) · Storage choice · Verification · Legal standing (e-signature laws, not legal advice) · For developers (contract + verify snippet, how the demo data layer maps to it) · CTA |
+| `/{locale}` | Explain the idea fast and send people into the product. Five sections after the hero (restraint rule). | Hero (sealed sheet) · 1. "What leaves your device" (live hashing toy: type, watch the fingerprint change) · 2. Who signs with SignChain (three photo use cases) · 3. Verify teaser (drop zone linking to `/verify`) · 4. FAQ (5 questions; the only FAQ on the site) · 5. Closing CTA |
+| `/{locale}/verify` | Public verification portal: no wallet, no account. **Justified:** verifiers are a distinct audience (auditors, lawyers) who must never be asked to sign in; it's also the product's proof. | Drop a file / paste a fingerprint · Try with samples (original, one number changed, one still being signed) · Result: match certificate, registered-but-unsigned, or no record with the tamper diff · link to how-it-works |
+| `/{locale}/how-it-works` | The mechanics for careful buyers, legal teams and developers. **Justified:** a signature product must show exactly what is signed, stored and provable; the mechanics live here, not on the home page. | The fingerprint · The signed message (EIP-712 preview) · The registry contract (interface) · Storage choice · Verification (verify snippet) · Legal standing and developers (two short cards) · CTA. One short line per section; the visuals do the explaining. |
 | `/{locale}/app` | Demo workspace: envelopes. Gate (connect demo wallet) first. | Greeting + three counters (needs you, waiting on others, completed) · Tabs (Needs your signature / Waiting on others / Completed / All) with search · envelope rows · empty states |
 | `/{locale}/app/new` | Send a document for signature. | Step 1 Document (drop or sample; fingerprint prints) · Step 2 Details (title, category, message) · Step 3 Signers (address book or paste address; include yourself; routing) · Step 4 Storage (fingerprint only / encrypted IPFS copy) · Review → sign → register |
 | `/{locale}/app/envelopes/[id]` | One envelope: review, sign, decline, void, receipt. | Status header · Document sheet (preview or file card) + fingerprint · Signers with strokes · Your action panel · Audit trail · Receipt / verify link |
@@ -77,7 +78,8 @@ All routes live under `/{locale}` (`en`, `fr`); `/` redirects by `Accept-Languag
 | 404 | Friendly not-found with links home, to the app and to verify. | |
 
 **Header (site):** SignChain mark + wordmark · How it works · Verify · Use cases (home anchor) · EN/FR · theme · "Open the app".
-**Header (app):** mark · Envelopes · New · Verify · "Demo · simulated" badge · network badge (Sepolia testnet) · wallet · Demo controls (fail next transaction, speed, reset demo).
+**Header (app):** mark · Envelopes · New · Verify · Demo chip · wallet · Demo controls (fail next transaction, speed, reset demo). The network (Sepolia testnet) shows in the wallet prompt only.
+**Disclaimers:** "Demo · simulated data" in the footers plus the header Demo chip; "Testnet demo · not financial or legal advice · no real funds" once per transaction, in the wallet's confirm-transaction prompt.
 **Mobile:** mark + menu button opening a full-height sheet (links, switches, CTA). In the app, a bottom tab bar (Envelopes / New / Verify).
 **Footer:** one-line description · links (How it works, Verify, Open the app, Credits) · "Demo · simulated data" · "Built with Monark" credit (muted, 12–13px, links to monark.io) · project documentation and GitHub links.
 
@@ -96,7 +98,7 @@ All routes live under `/{locale}` (`en`, `fr`); `/` redirects by `Accept-Languag
 
 Every transaction goes through the same simulated wallet: prompt (confirm / reject) → pending (spinner, "Waiting for block…", 1.2–2.5 s, or ~0.5 s in fast mode) → confirmed (block number, short tx hash) or failed (reason, "Nothing was recorded", Retry). "Fail the next transaction" in Demo controls forces a failure.
 
-1. **Connect.** Open `/app` → gate explains that the wallet is only a key → "Connect demo wallet" → prompt (SignChain wants to see your address, on Sepolia testnet) → Reject shows an inline error with Try again; Confirm shows the workspace with "Léa Marchand · 0x7a3F…c21D".
+1. **Connect.** Open `/app` → gate explains that the wallet is only a key → "Connect demo wallet" → prompt (SignChain wants to see your address, on Sepolia testnet) → Reject shows an inline error with Try again; Confirm shows the workspace with "Léa Marchand · 0xfb25…e30c".
 2. **Send a document.** `/app/new` → drop any file (hashed locally; >25 MB and empty files rejected with a message) or "Use a sample" → fingerprint prints → title/category/message (validated) → signers: yourself + picks from the address book or a pasted `0x…` address (invalid addresses flagged), routing → storage (encrypted IPFS copy shows its CID after pinning) → Review → **Sign** (EIP-712 prompt showing the typed data) → **Register** (tx prompt with testnet fee) → pending → confirmed: envelope created, your signature stroke drawn, next signer notified; failed: nothing recorded, Retry keeps the draft.
 3. **Co-sign and complete.** Inbox "Needs your signature" → Master Services Agreement from Halden Freight (sequential: Halden signed, you next, then your CFO) → review sheet + fingerprint → Sign → prompt → pending → confirmed → CFO becomes "next" → "Simulate Amir signing" (demo) → envelope completes: wax seal presses onto the sheet, "Completed" certificate, proof receipt download, verify link. Alternative: **Decline** with a reason → recorded on-chain, sender sees it; sender can **Void** an envelope still awaiting signatures.
 4. **Verify.** `/verify` → drop the original file (or "Try the signed original") → green certificate: title, fingerprint, each signer with time and block, anchor tx → "Try a copy with one number changed" → no record; the two fingerprints are shown aligned, every differing character marked, with the one-word change highlighted in the text → paste a fingerprint of an envelope still awaiting signatures → "Registered, not fully signed (2 of 3)". Invalid fingerprint input shows a format error.
@@ -109,13 +111,10 @@ Full strings live in `src/i18n/dictionaries/en.ts` and `fr.ts` (typed; French is
 
 | Section | EN | FR |
 |-|-|-|
-| Eyebrow | Wallet signatures · on-chain proof | Signatures par portefeuille · preuve on-chain |
 | H1 | Signatures anyone can check, forever. | Des signatures que tout le monde peut vérifier. |
 | Sub | (see §3) | (voir §3) |
 | Leaves device H2 | What leaves your device: 64 characters. | Ce qui quitte votre appareil : 64 caractères. |
-| Leaves device body | SignChain never needs your document. Your browser computes its fingerprint, and only that fingerprint is signed and recorded. Try it: change one letter and watch every character move. | SignChain n'a jamais besoin de votre document. Votre navigateur en calcule l'empreinte, et seule cette empreinte est signée puis inscrite. Essayez : changez une lettre, et chaque caractère bouge. |
-| Steps H2 | Four steps, one proof. | Quatre étapes, une preuve. |
-| Steps | Fingerprint it · Sign the fingerprint · Anchor it on-chain · Verify it anywhere | L'empreinte · La signature · L'ancrage on-chain · La vérification, partout |
+| Leaves device line | Only the fingerprint is signed. Change one letter and watch it move. | Seule l'empreinte est signée. Changez une lettre : tout bouge. |
 | Use cases H2 | Who signs with SignChain | Qui signe avec SignChain |
 | Use case 1 | Offer letters. Candidates sign from their phone; HR keeps a record no one can backdate. | Lettres d'offre. Les candidats signent depuis leur téléphone ; les RH gardent une trace que personne ne peut antidater. |
 | Use case 2 | Creative licences. Photographers and illustrators prove which version was licensed, to whom, and when. | Licences créatives. Photographes et illustrateurs prouvent quelle version a été cédée, à qui et quand. |
@@ -126,11 +125,12 @@ Full strings live in `src/i18n/dictionaries/en.ts` and `fr.ts` (typed; French is
 **FAQ** (EN / FR)
 
 1. *Do you keep a copy of my document?* No. Only its fingerprint is recorded. If you choose an IPFS copy, it's encrypted before it leaves your browser. / *Gardez-vous une copie de mon document ?* Non. Seule son empreinte est inscrite. Si vous choisissez une copie IPFS, elle est chiffrée avant de quitter votre navigateur.
-2. *Is a wallet signature legally binding?* In many places an electronic signature is valid when you can show who signed and that they meant to (for example ESIGN in the US, eIDAS in the EU, and Québec's IT framework act). SignChain gives you that evidence; whether it suffices for a given contract depends on the law that applies. This is not legal advice. / *Une signature par portefeuille a-t-elle une valeur juridique ?* …
-3. *Can someone verify without SignChain?* Yes. The registry is a public contract: re-hash the file with any SHA-256 tool and look up the fingerprint. The proof receipt contains everything needed. / …
-4. *What if one character changes?* The fingerprint changes completely, so the edited file has no record. Verification shows it immediately. / …
-5. *What if a signer loses their wallet?* Their past signatures stay valid; they sign new documents with a new address. Revoking an address is on the roadmap. / …
-6. *Which network does this demo use?* A simulated Sepolia testnet. Nothing here touches real funds or a real chain. / …
+2. *Is a wallet signature legally binding?* Often, yes: laws like ESIGN and eIDAS accept signatures you can attribute to a person and an unaltered document. SignChain produces that evidence. Not legal advice. / *Une signature par portefeuille a-t-elle une valeur juridique ?* Souvent, oui : l'ESIGN ou eIDAS admettent une signature rattachable à une personne et à un document intact. SignChain produit cette preuve. Pas un avis juridique.
+3. *Can someone verify without SignChain?* Yes. The registry is a public contract: re-hash the file with any SHA-256 tool and look up the fingerprint. The proof receipt contains everything needed. / (FR in `fr.ts`)
+4. *What if one character changes?* The fingerprint changes completely, so the edited file has no record. The verifier shows it instantly. / (FR in `fr.ts`)
+5. *What if a signer loses their wallet?* Their past signatures stay valid; they sign new documents from a new address. / (FR in `fr.ts`)
+
+**Decision (restraint pass):** five questions max, on the home page only; the "which network" question was cut (the wallet prompt shows the network).
 
 **Empty and error states** (EN / FR): "No envelopes need your signature. Nice." / « Aucun document n'attend votre signature. » · "Nothing waiting on others." / « Rien en attente chez les autres. » · "No completed envelopes yet. They appear here, sealed." / « Aucun document finalisé pour l'instant. Ils apparaîtront ici, scellés. » · "No envelope matches “{q}”." / « Aucun document ne correspond à « {q} ». » · "Wallet connection rejected. Nothing was shared." / « Connexion refusée. Rien n'a été partagé. » · "Transaction failed: the network dropped it. Nothing was recorded." / « Transaction échouée : le réseau l'a abandonnée. Rien n'a été inscrit. » · "This file is empty." / « Ce fichier est vide. » · "Files up to 25 MB in this demo." / « Fichiers de 25 Mo maximum dans cette démo. » · "That isn't a wallet address (0x + 40 hex characters)." / « Ce n'est pas une adresse de portefeuille (0x + 40 caractères hexadécimaux). » · "A fingerprint is 64 hexadecimal characters." / « Une empreinte compte 64 caractères hexadécimaux. » · "No record for this exact file." / « Aucune trace de ce fichier exact. » · 404 "This page was never signed." / « Cette page n'a jamais été signée. »
 
@@ -176,6 +176,8 @@ Status colour is always paired with an icon and a word (Signed, Awaiting, Declin
 2. **Your signature, drawn from your signature.** Every signer's line gets a pen stroke generated deterministically from their signature bytes; it draws itself when the signature confirms. When the last one lands, the wax seal presses onto the sheet.
 3. **The tamper diff.** On `/verify`, a modified file's fingerprint is laid under the original's; every differing character is struck in vermilion, showing that one changed word moved ~60 of 64 characters.
 
+**Restraint.** Show, don't explain: the sheet, the fingerprint and the prompts carry the message. Headings get at most one short line; no eyebrows on the home page; the four-step mechanics section moved off the home page to `/how-it-works` (where each step is a visual plus one line). In the app there are no paragraphs above forms: the "only 64 characters leave" note and the proof-receipt explanation sit behind info icons, the network badge lives only in the wallet prompt, and the testnet notice appears once per transaction in that prompt.
+
 **What we deliberately avoid, and why.** No purple or blue "AI" gradients, glass, neon or glow: legal buyers read those as speculative. No coins, tokens or price tickers: SignChain doesn't move value. No script "handwriting" fonts faking signatures: our strokes are derived from real signature bytes. No stock handshake or pen close-ups as filler. No default shadcn zinc look: every component is re-themed to paper, ink and wax. No Monark orange; Monark appears only in the footer credit.
 
 ## 9. Assets
@@ -186,7 +188,7 @@ Status colour is always paired with an icon and a word (Signed, Awaiting, Declin
 | `public/images/creative-licence.jpg` | Illustrator at her desk in a warm studio | Home, use case "Creative licences" |
 | `public/images/collective-approval.jpg` | A small team reviewing documents around a table | Home, use case "Collective approvals" |
 
-Credits, URLs and photographers are in `docs/assets.md` and on `/credits`. Icons: `lucide-react`, 1.5px stroke. Built in code: the logo and favicon, the sealed-sheet hero, the fingerprint printer, signature strokes, the wax seal, the four-step diagram, the tamper diff, the Open Graph image.
+Credits, URLs and photographers are in `docs/assets.md` and on `/credits`. Icons: `lucide-react`, 1.5px stroke. Built in code: the logo and favicon, the sealed-sheet hero, the fingerprint printer, signature strokes, the wax seal, the EIP-712 message and contract panels, the tamper diff, the Open Graph image.
 
 ## 10. Pricing strategy
 

@@ -10,11 +10,14 @@ export interface NavItem {
   label: string
   /** Also active on sub-paths. */
   prefix?: boolean
+  /** Another path prefix that also marks this item active. */
+  also?: string
 }
 
 export function isActive(pathname: string, item: NavItem) {
   const path = item.href.split("#")[0]!
   if (item.href.includes("#")) return false
+  if (item.also && pathname.startsWith(item.also)) return true
   return item.prefix ? pathname === path || pathname.startsWith(`${path}/`) : pathname === path
 }
 

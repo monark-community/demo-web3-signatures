@@ -1,4 +1,4 @@
-import { ArrowRightIcon, CheckIcon, FileSearchIcon, HardDriveIcon, ScaleIcon, ServerIcon } from "lucide-react"
+import { ArrowRightIcon, FileSearchIcon, HardDriveIcon, ScaleIcon, ServerIcon } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -67,8 +67,7 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]/ho
     <>
       <section className="border-b">
         <div className="mx-auto max-w-6xl px-4 pt-12 pb-12 sm:px-6 lg:pt-16">
-          <p className="eyebrow">{h.eyebrow}</p>
-          <h1 className="mt-3 max-w-3xl text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-balance sm:text-5xl">{h.title}</h1>
+          <h1 className="max-w-3xl text-4xl leading-[1.05] font-extrabold tracking-[-0.03em] text-balance sm:text-5xl">{h.title}</h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{h.lead}</p>
         </div>
       </section>
@@ -81,14 +80,6 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]/ho
               {s.fingerprint.title}
             </h2>
             <p className="mt-3 text-muted-foreground">{s.fingerprint.body}</p>
-            <ul className="mt-5 space-y-2">
-              {s.fingerprint.points.map((p) => (
-                <li key={p} className="flex items-center gap-2 text-sm">
-                  <CheckIcon className="size-4 text-success" aria-hidden="true" />
-                  {p}
-                </li>
-              ))}
-            </ul>
           </div>
           <div className="sheet self-start p-5">
             <p className="font-mono text-xs text-muted-foreground">halden-tessel-msa-2026.txt</p>
