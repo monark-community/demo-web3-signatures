@@ -1,73 +1,86 @@
-# Welcome to your Lovable project
+# SignChain
 
-## Project info
+**Signatures anyone can check, forever.** SignChain collects wallet signatures on a document's fingerprint (its SHA-256 hash) and anchors them on-chain, so anyone holding the file can prove who signed that exact version, and when, without trusting a vendor or handing over the document.
 
-**URL**: https://lovable.dev/projects/d293e7d2-96a8-45d3-8c30-08cc4f56abf9
+This repository is an interactive **demo** with simulated data: no real chain, wallet, IPFS node or backend. Fingerprints are real SHA-256 digests computed in the browser; everything else is simulated.
 
-## How can I edit this code?
+- Project documentation: https://www.monark.io/en/project/web3-signatures
+- Target host: https://signchain.monark.io
+- An independent project incubated by [Monark](https://www.monark.io).
 
-There are several ways of editing your application.
+## What you can do in the demo
 
-**Use Lovable**
+1. **Connect** a simulated wallet (confirm or reject).
+2. **Send a document**: drop any file (it's hashed locally, never uploaded) or use a sample contract, add signers from the address book or by address, pick parallel or in-order signing and where the document lives (fingerprint only, or an encrypted IPFS copy), then sign (EIP-712 prompt) and register (transaction).
+3. **Co-sign, decline or void**: sign the Halden Freight agreement, let the CFO sign (simulated), watch the envelope complete and the wax seal press; download the JSON proof receipt; decline with a reason; void an envelope you sent.
+4. **Verify** on the public verifier: drop a file or paste a fingerprint. Try the signed photo licence, then the same licence with one number changed, and see the fingerprints diverge.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d293e7d2-96a8-45d3-8c30-08cc4f56abf9) and start prompting.
+"Demo controls" in the app header can fail the next transaction, speed up blocks, and reset the demo.
 
-Changes made via Lovable will be committed automatically to this repo.
+## Run it locally
 
-**Use your preferred IDE**
+Requirements: Node 22 and pnpm 10.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+pnpm install
+pnpm dev          # http://localhost:3153
 ```
 
-**Edit a file directly in GitHub**
+Checks and production build:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+pnpm lint
+pnpm typecheck
+pnpm build && pnpm start   # http://localhost:3153
+```
 
-**Use GitHub Codespaces**
+No environment variables are needed. `NEXT_PUBLIC_SITE_URL` optionally overrides the canonical URL used in metadata and the sitemap (default `https://signchain.monark.io`).
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Screenshots of every page and flow (with the production server running):
 
-## What technologies are used for this project?
+```bash
+pnpm screenshots            # writes docs/screenshots/
+pnpm screenshots en-390     # only one variant
+```
 
-This project is built with:
+## How the simulation works
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Everything lives in `src/lib/demo/`, behind a small typed API, so it can be swapped for wagmi/viem and a real registry contract without touching the UI:
 
-## How can I deploy this project?
+| File | Role |
+|-|-|
+| `types.ts` | Envelopes, signer slots, audit events, wallet and settings types |
+| `sha256.ts` | Real SHA-256 (Web Crypto for files, a portable implementation for text) |
+| `documents.ts` | Sample documents; their fingerprints are the SHA-256 of these exact texts |
+| `seed.ts` | The persona (Léa Marchand, Tessel Robotics), address book and seeded envelopes |
+| `chain.ts` | Simulated network: addresses, signatures, CIDs, fees, block latency |
+| `store.ts` | External store persisted to `localStorage` (every access in try/catch) and the wallet-prompt queue |
+| `ops.ts` | Actions: connect, create, sign, decline, void, simulate a counterparty, verify |
 
-Simply open [Lovable](https://lovable.dev/projects/d293e7d2-96a8-45d3-8c30-08cc4f56abf9) and click on Share -> Publish.
+Each action goes through the same steps a real dApp would: a wallet prompt (the signed message or the transaction, which the visitor can reject), a pending state while "waiting for a block" (1.2 to 2.5 s), then confirmed with a block number or failed with nothing recorded. With wagmi/viem these map to `signTypedData`, `writeContract` and `waitForTransactionReceipt`.
 
-## Can I connect a custom domain to my Lovable project?
+## Project structure
 
-Yes, you can!
+```
+src/
+  app/[locale]/(site)/   home, how-it-works, verify, credits, pricing (unlinked), 404
+  app/[locale]/app/      demo workspace: inbox, new envelope, envelope detail
+  app/                   icon, sitemap, robots; opengraph-image per locale
+  components/site/       header, footer, mobile menu, theme and locale switches, seal mark
+  components/sheet/      document sheet, fingerprint, signature stroke, status chip
+  components/demo/       app shell, wallet prompt, flows, verifier
+  components/ui/         shadcn/ui + Monark UI registry components (wallet, connect-wallet, network-badge, tx-status)
+  i18n/                  EN/FR dictionaries, locale config, client provider
+  lib/demo/              simulated chain and data layer
+docs/                    site plan, asset credits, screenshots
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Routes are localised (`/en/…`, `/fr/…`); `/` redirects to the visitor's preferred language (`src/proxy.ts`).
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Deploy to Vercel
+
+Import the repository in Vercel and deploy with the framework defaults (Next.js, pnpm detected from the lockfile, Node 22 from `engines`). No `vercel.json` and no environment variables are required.
+
+## Stack
+
+Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS 4, shadcn/ui on the [Monark UI registry](https://ui.monark.io), lucide-react, next-themes, sonner. Playwright is a dev dependency for screenshots only.
