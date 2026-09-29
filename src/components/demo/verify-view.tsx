@@ -185,7 +185,7 @@ export function VerifyView() {
                 ] as const
               ).map(([id, label, dl]) => (
                 <li key={id} className="flex items-center justify-between gap-2 py-2">
-                  <Button type="button" variant="link" className="h-auto justify-start px-0 py-1.5 text-left whitespace-normal" onClick={() => trySample(id)} disabled={!!busy || !state}>
+                  <Button type="button" variant="link" className="h-auto min-w-0 shrink justify-start px-0 py-1.5 text-left whitespace-normal" onClick={() => trySample(id)} disabled={!!busy || !state}>
                     <FileTextIcon aria-hidden="true" />
                     {label}
                   </Button>
