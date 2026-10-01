@@ -6,6 +6,7 @@ import {
   CheckIcon,
   FileTextIcon,
   Loader2Icon,
+  LockIcon,
   PlusIcon,
   UserPlusIcon,
   XIcon,
@@ -478,6 +479,10 @@ export function NewEnvelope() {
           {step === 4 && (
             <div className="space-y-5">
               <h2 className="text-xl font-bold">{c.review.title}</h2>
+              <p className="text-sm text-muted-foreground">
+                {c.review.body}
+                {storage === "ipfs" && ` ${c.review.bodyIpfs}`}
+              </p>
               <div className="lg:hidden">
               <Summary
                 doc={doc}
@@ -493,6 +498,8 @@ export function NewEnvelope() {
                 view={view}
                 labels={{
                   signing: c.progress.signing,
+                  encrypting: c.progress.encrypting,
+                  pinning: c.progress.pinning,
                   prompt: c.progress.prompt,
                   pending: c.progress.pending,
                   confirmed: c.progress.confirmed,
@@ -594,6 +601,13 @@ function Summary({
           <div>
             <dt className="eyebrow">{e.storage}</dt>
             <dd className="mt-1">{storage === "hash" ? c.storage.hash : c.storage.ipfs}</dd>
+            {storage === "ipfs" && signers.length > 0 && (
+              <dd className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
+                <LockIcon className="size-3" aria-hidden="true" />
+                {/* The sender always holds a key, signing or not. */}
+                {t(c.storage.access, { n: signers.includes(ME.address) ? signers.length : signers.length + 1 })}
+              </dd>
+            )}
           </div>
         </div>
       </dl>

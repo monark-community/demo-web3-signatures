@@ -100,7 +100,8 @@ export type WalletRequest =
     }
   | { kind: "tx"; action: "register" | "sign" | "decline" | "void"; title: string; fee: string }
 
-export type TxPhase = "idle" | "prompt" | "pending" | "confirmed" | "failed"
+/** encrypting / pinning: the optional IPFS copy, between the signature and the registration. */
+export type TxPhase = "idle" | "prompt" | "encrypting" | "pinning" | "pending" | "confirmed" | "failed"
 
 export interface TxResult {
   ok: boolean

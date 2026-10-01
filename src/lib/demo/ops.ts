@@ -118,14 +118,26 @@ export async function createEnvelope(draft: Draft, onPhase: PhaseHook): Promise<
   const iSign = draft.signers.some((a) => a === ME.address)
   const signature = iSign ? await signMessage(draft.hash, draft.title, "sender", "approve", onPhase) : "none"
   if (signature === null) return rejected()
+
+  // The copy is encrypted and pinned before registering, so its CID goes into the same transaction.
+  let cid: string | undefined
+  let pinnedAt = 0
+  if (draft.storage === "ipfs") {
+    onPhase("encrypting")
+    await wait(latency(speed(), "prompt"))
+    onPhase("pinning")
+    await wait(latency(speed(), "block"))
+    cid = cidFor(draft.hash)
+    pinnedAt = Date.now()
+  }
+
   const res = await sendTx("register", draft.title, onPhase)
   if (!res.ok || !res.block) return res
 
   const now = Date.now()
   const id = randomId()
   const events: AuditEvent[] = [{ kind: "created", at: now, actor: ME.address, block: res.block, tx: res.tx }]
-  const cid = draft.storage === "ipfs" ? cidFor(draft.hash) : undefined
-  if (cid) events.push({ kind: "pinned", at: now + 1, actor: ME.address, note: cid })
+  if (cid) events.push({ kind: "pinned", at: pinnedAt, actor: ME.address, note: cid })
 
   let firstOpen = true
   const signers: SignerSlot[] = draft.signers.map((address) => {

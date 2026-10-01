@@ -36,6 +36,7 @@ import type { Envelope, SignerSlot } from "@/lib/demo/types"
 import { formatBytes, formatDateTime, formatNumber, formatRelative, shortHex } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
+import { EncryptedCopy } from "./encrypted-copy"
 import { isMe, myTurn, nameFor, receiptJson, signedCount } from "./helpers"
 import { InfoTip } from "./info-tip"
 import { TxFeedback } from "./tx-feedback"
@@ -119,7 +120,8 @@ function EnvelopeDetail({ e }: { e: Envelope }) {
         <div className="min-w-0">
           <p className="eyebrow">{dict.app.categories[e.category]}</p>
           <h1 className="mt-1.5 text-2xl leading-tight font-extrabold tracking-[-0.025em] text-balance sm:text-3xl">{e.title}</h1>
-          <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+          {/* A div, not a p: the wallet avatar renders a div. */}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
               <WalletAvatar address={e.sender} size={18} />
               {d.from} {nameFor(e.sender, unknown)}
@@ -131,7 +133,7 @@ function EnvelopeDetail({ e }: { e: Envelope }) {
             </span>
             <span aria-hidden="true">·</span>
             <span>{e.routing === "parallel" ? d.routingParallel : d.routingSequential}</span>
-          </p>
+          </div>
         </div>
         <StatusChip tone={tone.tone} icon={tone.icon} label={dict.app.status[e.status]} className="self-start px-2.5 py-1 text-sm sm:self-auto" />
       </header>
@@ -157,7 +159,7 @@ function EnvelopeDetail({ e }: { e: Envelope }) {
             text={doc?.text}
             textLabel={d.preview}
             maxTextLines={16}
-            file={doc ? undefined : { name: e.fileName, size: formatBytes(locale, e.fileSize), note: d.filePrivate }}
+            file={doc ? undefined : { name: e.fileName, size: formatBytes(locale, e.fileSize), note: e.storage === "ipfs" ? d.fileIpfs : d.filePrivate }}
             hash={e.hash}
             hashLabel={d.fingerprint}
             signers={sheetSigners}
@@ -181,6 +183,7 @@ function EnvelopeDetail({ e }: { e: Envelope }) {
             <ActionPanel e={e} />
           </div>
           <SignerList e={e} />
+          {e.storage === "ipfs" && <EncryptedCopy e={e} className={cn(sent && "fade-up")} />}
           <ProofPanel e={e} />
         </div>
       </div>
@@ -477,14 +480,6 @@ function ProofPanel({ e }: { e: Envelope }) {
           <dt className="text-muted-foreground">{d.storage}</dt>
           <dd className="text-right text-xs">{e.storage === "hash" ? d.storageHash : d.storageIpfs}</dd>
         </div>
-        {e.cid && (
-          <div className="flex justify-between gap-4">
-            <dt className="text-muted-foreground">CID</dt>
-            <dd className="min-w-0 truncate text-right font-mono text-xs" title={e.cid}>
-              {e.cid.slice(0, 14)}…{e.cid.slice(-6)}
-            </dd>
-          </div>
-        )}
       </dl>
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
         <Button type="button" variant="outline" onClick={download}>

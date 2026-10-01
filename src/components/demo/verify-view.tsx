@@ -23,8 +23,10 @@ import type { VerifyResult } from "@/lib/demo/types"
 import { formatDateTime, formatNumber, shortHex } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
+import { EncryptedCopy } from "./encrypted-copy"
 import { FileDrop } from "./file-drop"
 import { nameFor } from "./helpers"
+import { WalletPrompt } from "./wallet-prompt"
 
 const MAX_BYTES = 25 * 1024 * 1024
 
@@ -214,6 +216,8 @@ export function VerifyView() {
         )}
         {checked && !busy && <Result checked={checked} onAgain={() => setChecked(null)} />}
       </div>
+      {/* The verifier lives outside the app shell; this is the wallet for opening encrypted copies. */}
+      <WalletPrompt />
     </div>
   )
 }
@@ -305,6 +309,7 @@ function Result({ checked, onAgain }: { checked: Checked; onAgain: () => void })
           <dd className="mt-1">{e.storage === "hash" ? dict.app.envelope.storageHash : dict.app.envelope.storageIpfs}</dd>
         </div>
       </dl>
+      {e.storage === "ipfs" && <EncryptedCopy e={e} className="mt-6" />}
       <h3 className="eyebrow mt-6">{r.signers}</h3>
       <ul className="mt-2 grid gap-3 sm:grid-cols-2">
         {e.signers.map((s) => {
