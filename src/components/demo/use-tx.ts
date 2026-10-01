@@ -15,7 +15,7 @@ export interface TxView {
 }
 
 /**
- * Tracks one action through prompt → pending → confirmed / failed, for the
+ * Tracks one action through prompt → (encrypting → pinning) → pending → confirmed / failed, for the
  * inline feedback next to the button that started it.
  */
 export function useTx() {
@@ -43,6 +43,6 @@ export function useTx() {
   }, [])
 
   const reset = useCallback(() => setView({ phase: "idle", step: null }), [])
-  const busy = view.phase === "prompt" || view.phase === "pending"
+  const busy = view.phase !== "idle" && view.phase !== "confirmed" && view.phase !== "failed"
   return { view, run, reset, busy }
 }

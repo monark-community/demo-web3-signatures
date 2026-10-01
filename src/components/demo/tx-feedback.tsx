@@ -1,6 +1,6 @@
 "use client"
 
-import { AlertTriangleIcon, CheckCircle2Icon, Loader2Icon, WalletIcon } from "lucide-react"
+import { AlertTriangleIcon, CheckCircle2Icon, Loader2Icon, LockIcon, WalletIcon } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -20,6 +20,9 @@ export interface TxLabels {
   rejected: string
   failed: string
   retry: string
+  /** Only for actions that store an encrypted IPFS copy. */
+  encrypting?: string
+  pinning?: string
 }
 
 /** Inline, next to the action: never a toast over the thing it reports on. */
@@ -40,6 +43,7 @@ export function TxFeedback({
   if (view.phase === "idle") return null
 
   const failed = view.phase === "failed"
+  const working = view.phase === "prompt" || view.phase === "encrypting" || view.phase === "pinning" || view.phase === "pending"
   const reason = view.error === "reverted" ? dict.app.txErrors.reverted : dict.app.txErrors.dropped
 
   let icon = <Loader2Icon className="size-4 animate-spin" aria-hidden="true" />
@@ -47,7 +51,11 @@ export function TxFeedback({
   if (view.phase === "prompt") {
     icon = <WalletIcon className="size-4" aria-hidden="true" />
     text = view.step === "tx" ? labels.prompt : labels.signing
-  } else if (view.phase === "pending") text = labels.pending
+  } else if (view.phase === "encrypting") {
+    icon = <LockIcon className="size-4" aria-hidden="true" />
+    text = labels.encrypting ?? labels.pending
+  } else if (view.phase === "pinning") text = labels.pinning ?? labels.pending
+  else if (view.phase === "pending") text = labels.pending
   else if (view.phase === "confirmed") {
     icon = <CheckCircle2Icon className="size-4" aria-hidden="true" />
     text = t(labels.confirmed, { block: view.block ? formatNumber(locale, view.block) : "" })
@@ -64,7 +72,7 @@ export function TxFeedback({
         "fade-up rounded-sm border p-3 text-sm",
         failed && "border-destructive/40 bg-destructive/8",
         view.phase === "confirmed" && "border-success/40 bg-success/8",
-        (view.phase === "prompt" || view.phase === "pending") && "border-warning/40 bg-warning/8",
+        working && "border-warning/40 bg-warning/8",
         className
       )}
     >
@@ -73,7 +81,7 @@ export function TxFeedback({
           "flex items-start gap-2 font-medium",
           failed && "text-destructive",
           view.phase === "confirmed" && "text-success",
-          (view.phase === "prompt" || view.phase === "pending") && "text-warning"
+          working && "text-warning"
         )}
       >
         <span className="mt-0.5 shrink-0">{icon}</span>
