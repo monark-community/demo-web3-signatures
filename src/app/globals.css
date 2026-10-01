@@ -1,0 +1,226 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * SignChain identity: "Legal paper, sealed with math."
+ * Bond paper, black ink, oxblood wax. Base structure comes from the Monark UI
+ * registry theme; every colour, the radius and the fonts are overridden here.
+ * Contrast ratios are listed in docs/site-plan.md §8.
+ */
+
+@theme inline {
+  --radius: 0.375rem;
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-paper: var(--paper);
+  --color-rule: var(--rule);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #f4f2ec;
+  --foreground: #1c1b18;
+  --card: #fcfbf8;
+  --card-foreground: #1c1b18;
+  --popover: #fcfbf8;
+  --popover-foreground: #1c1b18;
+  --primary: #7a1e2c;
+  --primary-foreground: #fcf6f3;
+  --secondary: #e9e6de;
+  --secondary-foreground: #1c1b18;
+  --muted: #e9e6de;
+  --muted-foreground: #5b574f;
+  --accent: #f1e4df;
+  --accent-foreground: #5c1622;
+  --destructive: #b42a12;
+  --success: #1d6a46;
+  --warning: #855a00;
+  --border: #d8d3c8;
+  --input: #cbc5b8;
+  --ring: #7a1e2c;
+  --chart-1: #7a1e2c;
+  --chart-2: #1d6a46;
+  --chart-3: #855a00;
+  --chart-4: #46505e;
+  --chart-5: #a5604a;
+  --paper: #fffefb;
+  --rule: #bdb6a8;
+  --seal: #7a1e2c;
+  --seal-ink: #fcf6f3;
+}
+
+.dark {
+  --background: #121315;
+  --foreground: #ece9e2;
+  --card: #1a1b1e;
+  --card-foreground: #ece9e2;
+  --popover: #1a1b1e;
+  --popover-foreground: #ece9e2;
+  --primary: #e7919b;
+  --primary-foreground: #2b0a11;
+  --secondary: #232428;
+  --secondary-foreground: #ece9e2;
+  --muted: #232428;
+  --muted-foreground: #a9a59c;
+  --accent: #3a1b22;
+  --accent-foreground: #f5d3d8;
+  --destructive: #f28266;
+  --success: #6cc597;
+  --warning: #e2b252;
+  --border: #303136;
+  --input: #3a3b41;
+  --ring: #e7919b;
+  --chart-1: #e7919b;
+  --chart-2: #6cc597;
+  --chart-3: #e2b252;
+  --chart-4: #9aa5b5;
+  --chart-5: #d99a82;
+  --paper: #1d1e21;
+  --rule: #45464c;
+  --seal: #b8394b;
+  --seal-ink: #fcf6f3;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+}
+
+@layer components {
+  /* A sheet of paper: square corners, hairline edge, blur-free stacked shadow. */
+  .sheet {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    box-shadow:
+      4px 4px 0 -1px var(--background),
+      4px 4px 0 0 var(--border);
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+  .ruled {
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+/* Signature moments. All collapse to instant under reduced motion. */
+@keyframes print-in {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.print-char {
+  animation: print-in 0.18s ease-out both;
+}
+@keyframes draw-stroke {
+  from {
+    stroke-dashoffset: var(--len, 600);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.draw-stroke {
+  stroke-dasharray: var(--len, 600);
+  animation: draw-stroke 1s cubic-bezier(0.55, 0.1, 0.3, 1) both;
+}
+@keyframes seal-press {
+  0% {
+    opacity: 0;
+    transform: scale(1.5) rotate(-18deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.94) rotate(-6deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-8deg);
+  }
+}
+.seal-press {
+  animation: seal-press 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-up {
+  animation: fade-up 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .print-char,
+  .draw-stroke,
+  .seal-press,
+  .fade-up {
+    animation: none !important;
+    stroke-dasharray: none;
+  }
+}
