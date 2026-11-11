@@ -19,7 +19,7 @@ This repository is an interactive **demo** with simulated data: no real chain, w
 
 ## Run it locally
 
-Requirements: Node 22 and pnpm 10.
+Requirements: Node 22.23.4 or newer on the 22 line and pnpm 10.
 
 ```bash
 pnpm install
@@ -79,7 +79,7 @@ Routes are localised (`/en/…`, `/fr/…`); `/` redirects to the visitor's pref
 
 ## Deploy to Vercel
 
-Import the repository in Vercel and deploy with the framework defaults (Next.js, pnpm detected from the lockfile, Node 22 from `engines`). No `vercel.json` and no environment variables are required.
+Import the repository in Vercel and deploy with the framework defaults (Next.js, pnpm detected from the lockfile, Node 22 from `engines`). No `vercel.json` and no environment variables are required. `pnpm build` and `pnpm start` stop on a Node release exposed to CVE-2026-111497.
 
 ## Stack
 
