@@ -5,7 +5,9 @@
   "description": "SignChain: wallet signatures on a document's fingerprint, anchored on-chain and verifiable by anyone (simulated demo).",
   "scripts": {
     "dev": "next dev --port 3153",
+    "prebuild": "node scripts/check-node.mjs",
     "build": "next build",
+    "prestart": "node scripts/check-node.mjs",
     "start": "next start --port 3153",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
